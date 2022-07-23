@@ -1,0 +1,17 @@
+{
+    "folders": [
+		{
+			"name": "Design",
+			"path": "..\\..\\Design"
+		},
+		{
+			"name": "Countries App",
+			"path": ".."
+		}
+	],
+    "settings": {
+        "debug.allowBreakpointsEverywhere": true,
+        "files.autoGuessEncoding": true,
+        "liveServer.settings.multiRootWorkspaceName": "Countries App"
+    }
+}
