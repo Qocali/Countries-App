@@ -27,12 +27,13 @@ async function fetcha(url) {
 }
 const comes = (response) => {
     let html = "";
+    let check = typeof response[0].name == "object";
     response.forEach(element => {
 
         html += ` <div class = "Card" style = "width: 18rem;">
 <img src = "${element.flags.png}" class = "Card-img-top" alt = "..." >
 <div class = "Card-body" >
-<h5 class = "Card-title" >${ element.name.common }</h5> <p class = "Card-text" >${ element.population }</p> <a href="Detail.html?contry=${ element.name.common }" class = "btn btn-primary" >${ element.region }</a> </div>
+<h5 class = "Card-title" >${ element.name.common }</h5> <p class = "Card-text" >${ element.population }</p> <a href=Detail.html?country=${!check ? element.name.toLowerCase() : element.name.official.toLowerCase()} class = "btn btn-primary" >${ element.region }</a> </div>
 
 </div>`
     });

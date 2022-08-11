@@ -1,69 +1,68 @@
-var url = new URL(location.href);
-var contry;
-const params = url.searchParams;
-if (params.has('contry')) {
-    contry = params.get('contry');
-    console.log(contry);
-    detailfetcha(contry);
+let back = document.getElementById("back");
+let myurl = new URL(location.href);
+detailDiv = document.getElementById("detailDiv");
+back.addEventListener("click", function () {
+  history.back();
+});
+request();
+async function request() {
+  const data = await fetch(
+    `https://restcountries.com/v2/name/${myurl.searchParams.get("country")}`
+  )
+    .then((res) => res.json())
+    .then();
+  makeDetail(data);
 }
 
-async function detailfetcha(contry) {
-    await fetch(`https://restcountries.com/v3.1/name/${contry}`).then((x) => {
-        return x.json()
-    }).then((response) => {
-        comes(response);
-    })
-};
-const comes = (response) => {
-    let html = "";
-
-    response.forEach(element => {
-
-        if (element.name.common === contry) {
-            console.log(element)
-
-            html += ` <div class="img">
-                    <img style="width:30vw;" src="${element.flags.png}" class="Card-img-top" alt="...">
-                </div>
-                <div class="info">
-                    <div class="info-base">
-                        <div class="pagination">
-                            <ul>
-                                 <li>${element.name.nativeName.ell.common}</li>
-                                <li>${element.population}</li>
-                                <li>${element.region}</li>
-                                <li>${element.subregion}</li>
-                                <li>${element.capital}</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <li>${element.demonyms.eng.f}</li>
-                                <li>${element.currencies.EUR.name}</li>
-                                <li>${element.languages.ell}</li>
-            
-                            </ul>
-                        </div>
-            
-                    </div>
-            
-                    <div class="bord">
-                        <p>Border Countries:</p>
-                        <button>France</button>
-                        <button>Germany</button>
-                        <button>Danmark</button>
-                    </div>
-                </div>`
-        }
-    });
-    main.innerHTML = html;
-}
-i.addEventListener('click', () => {
-    let data = document.documentElement.dataset.theme;
-    // console.log(data);
-    if (document.documentElement.dataset.theme === "light") {
-        document.documentElement.dataset.theme = "dark";
-    } else {
-        document.documentElement.dataset.theme = "light";
+function makeDetail(e) {
+  let langs = "";
+  for (el of e[0].languages) {
+    langs += el.name + ", ";
+  }
+  let curren = "";
+  for (el of e[0].currencies) {
+    curren += el.name + ", ";
+  }
+  let border = "";
+  if (e[0].borders != undefined) {
+    for (el of e[0].borders) {
+      border += `<span>${el}</span>`;
     }
-})
+  }
+  let dethtml = `
+        <img src="${e[0].flags.png}" alt="sekil" class="detail__img">
+        <div class="detail__div__div">
+            <h1 class="olkeAdi">${e[0].name}</h1>
+            <div class="detail__div__div__div">
+                <div style="margin-right: 100px ;">
+                    <p class="infolar"><span>Native Name:</span> ${
+                      e[0].nativeName
+                    }</p>
+                    <p class="infolar"> <span>Population:</span> ${
+                      e[0].population
+                    }</p>
+                    <p class="infolar"> <span>Region:</span> ${e[0].region}</p>
+                    <p class="infolar"><span>Sub Region:</span> ${
+                      e[0].subregion
+                    }</p>
+                    <p class="infolar"><span>Capital:</span> ${e[0].capital}</p>
+                </div>
+                <div>
+                    <p class="infolar"><span>Top Level Domain:</span> ${e[0].topLevelDomain.join(
+                      ","
+                    )}  </p>
+                    <p class="infolar"> <span>Currencies:</span> ${curren.slice(
+                      0,
+                      -2
+                    )} </p>
+                    <p class="infolar"><span>Languages:</span>${langs.slice(
+                      0,
+                      -2
+                    )}</p>
+                </div>
+            </div>
+            <div class="borders"> <b> Border Countries:</b> ${border}</div>
+        </div>
+   `;
+  detailDiv.innerHTML = dethtml;
+}
